@@ -14,6 +14,7 @@ Route::group([], function () {
     Route::post('/checkRecoveryCode', [\App\Http\Controllers\Api\UserController::class, 'checkRecoveryCode']);
     Route::post('/setPassword', [\App\Http\Controllers\Api\UserController::class, 'setPassword']);
     Route::get('/configuration/formReg', [\App\Http\Controllers\Api\ConfigController::class, 'formReg']);
+    Route::get('/chekLogin/{login}', [\App\Http\Controllers\Api\CheckController::class, 'login']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
