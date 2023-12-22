@@ -32,4 +32,29 @@ class CheckController extends Controller
             200
         );
     }
+
+    public function email(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $user = User::where('email', $request['email'])->first();
+
+        if ($user != null) {
+            return response()->json(
+                [
+                    'success' => true,
+                    'message' => 'Пользователь с таким email существует',
+                    'token'   => null,
+                ],
+                200
+            );
+        }
+
+        return response()->json(
+            [
+                'success' => false,
+                'message' => 'Пользователя с таким email не существует',
+                'token'   => null,
+            ],
+            200
+        );
+    }
 }
