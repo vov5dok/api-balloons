@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CheckRecoveryCodeRequest;
 use App\Http\Requests\User\RecoveryCodeRequest;
+use App\Http\Requests\User\SetPasswordRequest;
 use App\Mail\User\RecoveryCodeMail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -80,7 +81,36 @@ class UserController extends Controller
                 'message' => '',
                 'token'   => null,
             ],
-            500
+            200
+        );
+    }
+
+    public function setPassword(SetPasswordRequest $request)
+    {
+        $data = $request->validated();
+        $user = User::where('email', $data['email'])->first();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Пользователь с таким e-mail не найден',
+                    'token'   => null,
+                ],
+                500
+            );
+        }
+
+        $user->password = bcrypt($data['password']);
+        $user->save();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => '',
+                'token'   => null,
+            ],
+            200
         );
     }
 }

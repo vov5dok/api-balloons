@@ -12,6 +12,7 @@ Route::group([], function () {
     Route::post('/refresh', [AuthController::class, 'refresh']);
     Route::post('/sendEmailForPassword', [\App\Http\Controllers\Api\UserController::class, 'setRecoveryCode']);
     Route::post('/checkRecoveryCode', [\App\Http\Controllers\Api\UserController::class, 'checkRecoveryCode']);
+    Route::post('/setPassword', [\App\Http\Controllers\Api\UserController::class, 'setPassword']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
