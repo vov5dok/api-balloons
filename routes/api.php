@@ -19,5 +19,5 @@ Route::group([], function () {
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
-    Route::get('/user-profile', [AuthController::class, 'userProfile']);
+    Route::get('/getUserByJWT', [\App\Http\Controllers\Api\UserController::class, 'showByJWT']);
 });

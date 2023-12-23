@@ -11,4 +11,9 @@ class CompletedLevel extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['count_star', 'level_id', 'user_id'];
+
+    public function level(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Level::class, 'level_id');
+    }
 }

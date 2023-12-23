@@ -113,4 +113,43 @@ class UserController extends Controller
             200
         );
     }
+
+    public function showByJWT()
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Пользователь не авторизован',
+                    'money'   => null,
+                    'rating'  => null,
+                    'height'  => null,
+                    'token'   => null,
+                ],
+                500
+            );
+        }
+
+        $completedLevels = $user->completedLevels;
+        $height = 0;
+        foreach ($completedLevels as $completedLevel) {
+            if ($completedLevel->level !== null) {
+                $height = max($completedLevel->level->height, $height);
+            }
+        }
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => '',
+                'money'   => $user->money,
+                'rating'  => $user->countStar,
+                'height'  => $height,
+                'token'   => null,
+            ],
+            200
+        );
+    }
 }
