@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CheckRecoveryCodeRequest;
+use App\Http\Requests\User\ModifyEmailRequest;
 use App\Http\Requests\User\ModifyLoginRequest;
 use App\Http\Requests\User\RecoveryCodeRequest;
 use App\Http\Requests\User\SetPasswordRequest;
@@ -154,7 +155,7 @@ class UserController extends Controller
         );
     }
 
-    public function modifyLogin(ModifyLoginRequest $request)
+    public function modifyLogin(ModifyLoginRequest $request): \Illuminate\Http\JsonResponse
     {
         $user = auth()->user();
 
@@ -170,6 +171,34 @@ class UserController extends Controller
         }
 
         $user->login = $request['login'];
+        $user->save();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => '',
+                'token'   => null,
+            ],
+            200
+        );
+    }
+
+    public function modifyEmail(ModifyEmailRequest $request): \Illuminate\Http\JsonResponse
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Пользователь не авторизован',
+                    'token'   => null,
+                ],
+                500
+            );
+        }
+
+        $user->email = $request['email'];
         $user->save();
 
         return response()->json(
