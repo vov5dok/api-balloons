@@ -20,4 +20,5 @@ Route::group([], function () {
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/getUserByJWT', [\App\Http\Controllers\Api\UserController::class, 'showByJWT']);
+    Route::patch('/modifyLogin', [\App\Http\Controllers\Api\UserController::class, 'modifyLogin']);
 });

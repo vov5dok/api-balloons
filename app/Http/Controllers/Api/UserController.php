@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\User\CheckRecoveryCodeRequest;
+use App\Http\Requests\User\ModifyLoginRequest;
 use App\Http\Requests\User\RecoveryCodeRequest;
 use App\Http\Requests\User\SetPasswordRequest;
 use App\Mail\User\RecoveryCodeMail;
@@ -147,6 +148,34 @@ class UserController extends Controller
                 'money'   => $user->money,
                 'rating'  => $user->countStar,
                 'height'  => $height,
+                'token'   => null,
+            ],
+            200
+        );
+    }
+
+    public function modifyLogin(ModifyLoginRequest $request)
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Пользователь не авторизован',
+                    'token'   => null,
+                ],
+                500
+            );
+        }
+
+        $user->login = $request['login'];
+        $user->save();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => '',
                 'token'   => null,
             ],
             200
