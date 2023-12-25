@@ -11,4 +11,9 @@ class Category extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['name'];
+
+    public function levels(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Level::class, 'category_id');
+    }
 }

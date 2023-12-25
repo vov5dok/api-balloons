@@ -11,4 +11,9 @@ class Level extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['height', 'point_first_star', 'point_second_star', 'point_third_star', 'number', 'category_id'];
+
+    public function completedLevelByUser()
+    {
+        return $this->hasMany(CompletedLevel::class)->where('user_id', auth()->user()->id);
+    }
 }
