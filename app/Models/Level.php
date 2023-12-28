@@ -14,6 +14,11 @@ class Level extends Model
 
     public function completedLevelByUser()
     {
-        return $this->hasMany(CompletedLevel::class)->where('user_id', auth()->user()->id);
+        return $this->hasMany(CompletedLevel::class)->where('user_id', auth()->id());
+    }
+
+    public function goals()
+    {
+        return $this->hasMany(Goal::class);
     }
 }

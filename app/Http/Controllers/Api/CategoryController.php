@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Category\LevelsRequest;
 use App\Http\Requests\User\CheckRecoveryCodeRequest;
 use App\Http\Requests\User\ModifyEmailRequest;
 use App\Http\Requests\User\ModifyLoginRequest;
@@ -12,6 +13,7 @@ use App\Mail\User\RecoveryCodeMail;
 use App\Models\Category;
 use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -115,6 +117,71 @@ class CategoryController extends Controller
                 'success'  => true,
                 'message'  => null,
                 'category' => $categories,
+                'token'    => null,
+            ],
+            200
+        );
+    }
+
+    public function levels(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Пользователь не авторизован',
+                    'levels' => null,
+                    'token'    => null,
+                ],
+                500
+            );
+        }
+
+        $category = Category::where('id', $request->category_id)->first();
+        $levels = [];
+
+        if ($category == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Категория не найдена',
+                    'levels'   => null,
+                    'token'    => null,
+                ],
+                500
+            );
+        }
+
+        foreach ($category->levels as $levelModel) {
+
+            $goals = [];
+
+            foreach ($levelModel->goals as $goalModel) {
+                $goals[] = [
+                    'figure_id' => $goalModel->id,
+                    'count'     => $goalModel->count,
+                ];
+            }
+
+            $level = [
+                'id' => $levelModel->id,
+                'number' => $levelModel->number,
+                'height' => $levelModel->height,
+                'isCompleted' => $levelModel->completedLevelByUser->isNotEmpty(),
+                'countStar' => $levelModel->completedLevelByUser->isNotEmpty() ? $levelModel->completedLevelByUser->first()->count_star : 0,
+                'goals' => $goals,
+            ];
+
+            $levels[] = $level;
+        }
+
+        return response()->json(
+            [
+                'success'  => true,
+                'message'  => null,
+                'levels'   => $levels,
                 'token'    => null,
             ],
             200
