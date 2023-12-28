@@ -24,4 +24,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('/modifyEmail', [\App\Http\Controllers\Api\UserController::class, 'modifyEmail']);
     Route::get('/category/all', [\App\Http\Controllers\Api\CategoryController::class, 'all']);
     Route::get('/category/levels/{category_id}', [\App\Http\Controllers\Api\CategoryController::class, 'levels']);
+    Route::get('/level/{levelId}', [\App\Http\Controllers\Api\LevelController::class, 'index']);
 });

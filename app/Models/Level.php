@@ -21,4 +21,14 @@ class Level extends Model
     {
         return $this->hasMany(Goal::class);
     }
+
+    public function awards()
+    {
+        return $this->hasMany(Award::class);
+    }
+
+    public function cells()
+    {
+        return $this->hasMany(Cell::class);
+    }
 }
