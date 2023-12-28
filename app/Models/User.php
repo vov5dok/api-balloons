@@ -67,4 +67,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->completedLevels->sum('count_star');
     }
+
+    public function hints(): HasMany
+    {
+        return $this->hasMany(Hint::class);
+    }
 }
