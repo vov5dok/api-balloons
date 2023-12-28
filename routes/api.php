@@ -26,4 +26,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/category/levels/{category_id}', [\App\Http\Controllers\Api\CategoryController::class, 'levels']);
     Route::get('/level/{levelId}', [\App\Http\Controllers\Api\LevelController::class, 'index']);
     Route::get('/hint/all', [\App\Http\Controllers\Api\HintController::class, 'all']);
+    Route::patch('/hint', [\App\Http\Controllers\Api\HintController::class, 'updateCount']);
 });

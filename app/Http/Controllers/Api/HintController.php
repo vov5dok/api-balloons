@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Hint;
 use Illuminate\Http\Request;
 
 class HintController extends Controller
@@ -37,6 +38,67 @@ class HintController extends Controller
                 'success' => true,
                 'message' => null,
                 'hints'   => $hints,
+                'token'   => null,
+            ],
+            200
+        );
+    }
+
+    public function updateCount(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Пользователь не авторизован',
+                    'hint'     => null,
+                    'token'    => null,
+                ],
+                500
+            );
+        }
+
+        $hintModel = Hint::where('id', $request->figure)->first();
+
+        if ($hintModel == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Подсказка не найдена',
+                    'hint'     => null,
+                    'token'    => null,
+                ],
+                500
+            );
+        }
+
+        if ($hintModel->count == 0) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Подсказки кончились',
+                    'hint'     => null,
+                    'token'    => null,
+                ],
+                500
+            );
+        }
+
+        $hintModel->count = $hintModel->count - 1;
+        $hintModel->save();
+
+        $hint = [
+            'figure' => $hintModel->figure_id,
+            'count'  => $hintModel->count,
+        ];
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => null,
+                'hint'    => $hint,
                 'token'   => null,
             ],
             200
