@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\CompletedLevel;
 use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,6 @@ class LevelController extends Controller
                     'success'  => false,
                     'message'  => 'Пользователь не авторизован',
                     'level' => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -34,7 +34,6 @@ class LevelController extends Controller
                     'success'  => false,
                     'message'  => 'Уровень не найден',
                     'level'   => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -79,7 +78,46 @@ class LevelController extends Controller
                 'success'  => true,
                 'message'  => null,
                 'level'    => $level,
-                'token'    => null,
+            ],
+            200
+        );
+    }
+
+    public function complete(Request $request)
+    {
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Пользователь не авторизован',
+                ],
+                500
+            );
+        }
+
+        $levelModel = Level::where('id', $request->levelId)->first();
+
+        if ($levelModel == null) {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Уровень не найден',
+                ],
+                500
+            );
+        }
+
+        $completedLevel = CompletedLevel::updateOrCreate(
+            ['level_id' => $levelModel->id, 'user_id' => $user->id],
+            ['count_star' => $request->countStar]
+        );
+
+        return response()->json(
+            [
+                'success'  => true,
+                'message'  => null,
             ],
             200
         );
