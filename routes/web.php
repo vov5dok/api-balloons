@@ -2,3 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 
+Route::get('test', function () {
+   dump(132);
+});
+

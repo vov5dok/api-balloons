@@ -29,4 +29,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::patch('/hint', [\App\Http\Controllers\Api\HintController::class, 'updateCount']);
     Route::post('/level/complete', [\App\Http\Controllers\Api\LevelController::class, 'complete']);
     Route::get('/products', [\App\Http\Controllers\Api\ProductController::class, 'index']);
+    Route::get('/rating', [\App\Http\Controllers\Api\RatingController::class, 'top']);
+    Route::post('/product/buy', [\App\Http\Controllers\Api\ProductController::class, 'buy']);
 });
