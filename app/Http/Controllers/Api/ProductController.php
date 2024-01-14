@@ -35,6 +35,7 @@ class ProductController extends Controller
 
         foreach ($productsModel as $productModel) {
             $products[] = [
+                'productId' => $productModel->id,
                 'figure'    => $productModel->figure_id,
                 'count'     => $productModel->count,
                 'price'     => $productModel->price,

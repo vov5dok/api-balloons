@@ -19,7 +19,6 @@ class HintController extends Controller
                     'success'  => false,
                     'message'  => 'Пользователь не авторизован',
                     'hints' => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -38,7 +37,6 @@ class HintController extends Controller
                 'success' => true,
                 'message' => null,
                 'hints'   => $hints,
-                'token'   => null,
             ],
             200
         );
@@ -54,7 +52,6 @@ class HintController extends Controller
                     'success'  => false,
                     'message'  => 'Пользователь не авторизован',
                     'hint'     => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -68,7 +65,6 @@ class HintController extends Controller
                     'success'  => false,
                     'message'  => 'Подсказка не найдена',
                     'hint'     => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -80,7 +76,6 @@ class HintController extends Controller
                     'success'  => false,
                     'message'  => 'Подсказки кончились',
                     'hint'     => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -99,7 +94,6 @@ class HintController extends Controller
                 'success' => true,
                 'message' => null,
                 'hint'    => $hint,
-                'token'   => null,
             ],
             200
         );

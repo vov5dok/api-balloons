@@ -35,7 +35,7 @@ class AuthController extends Controller
             return response()->json(
                 [
                     'success' => false,
-                    'message' => 'Пара логин/пароль неверные',
+                    'message' => ['login' => 'Пара логин/пароль неверные'],
                     'token'   => null,
                 ],
                 500
@@ -69,7 +69,6 @@ class AuthController extends Controller
             [
                 'success' => true,
                 'message' => '',
-                'token'   => null,
             ],
             200
         );
