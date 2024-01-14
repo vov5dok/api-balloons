@@ -31,7 +31,6 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => null,
-                'token'   => null,
             ],
             200
         );
@@ -49,7 +48,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Пользователь с таким e-mail не найден',
-                    'token'   => null,
                 ],
                 500
             );
@@ -60,7 +58,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Неверный код сброса пароля',
-                    'token'   => null,
                 ],
                 500
             );
@@ -71,7 +68,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Время действия кода вышло',
-                    'token'   => null,
                 ],
                 500
             );
@@ -81,7 +77,6 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => '',
-                'token'   => null,
             ],
             200
         );
@@ -97,7 +92,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Пользователь с таким e-mail не найден',
-                    'token'   => null,
                 ],
                 500
             );
@@ -110,7 +104,6 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => '',
-                'token'   => null,
             ],
             200
         );
@@ -128,7 +121,6 @@ class UserController extends Controller
                     'money'   => null,
                     'rating'  => null,
                     'height'  => null,
-                    'token'   => null,
                 ],
                 500
             );
@@ -149,7 +141,6 @@ class UserController extends Controller
                 'money'   => $user->money,
                 'rating'  => $user->countStar,
                 'height'  => $height,
-                'token'   => null,
             ],
             200
         );
@@ -164,7 +155,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Пользователь не авторизован',
-                    'token'   => null,
                 ],
                 500
             );
@@ -177,7 +167,6 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => '',
-                'token'   => null,
             ],
             200
         );
@@ -192,7 +181,6 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Пользователь не авторизован',
-                    'token'   => null,
                 ],
                 500
             );
@@ -205,7 +193,6 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => '',
-                'token'   => null,
             ],
             200
         );

@@ -29,7 +29,6 @@ class CategoryController extends Controller
                     'success'  => false,
                     'message'  => 'Пользователь не авторизован',
                     'category' => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -117,7 +116,6 @@ class CategoryController extends Controller
                 'success'  => true,
                 'message'  => null,
                 'category' => $categories,
-                'token'    => null,
             ],
             200
         );
@@ -133,7 +131,6 @@ class CategoryController extends Controller
                     'success'  => false,
                     'message'  => 'Пользователь не авторизован',
                     'levels' => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -148,7 +145,6 @@ class CategoryController extends Controller
                     'success'  => false,
                     'message'  => 'Категория не найдена',
                     'levels'   => null,
-                    'token'    => null,
                 ],
                 500
             );
@@ -182,7 +178,6 @@ class CategoryController extends Controller
                 'success'  => true,
                 'message'  => null,
                 'levels'   => $levels,
-                'token'    => null,
             ],
             200
         );

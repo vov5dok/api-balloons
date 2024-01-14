@@ -38,7 +38,6 @@ class ConfigController extends Controller
                 'success' => true,
                 'message' => null,
                 'config'  => $config,
-                'token'   => null,
             ],
             200
         );

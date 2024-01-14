@@ -17,7 +17,6 @@ class CheckController extends Controller
                 [
                     'success' => true,
                     'message' => 'Пользователь с таким никнеймом существует',
-                    'token'   => null,
                 ],
                 200
             );
@@ -27,7 +26,6 @@ class CheckController extends Controller
             [
                 'success' => false,
                 'message' => 'Пользователя с таким никнеймом не существует',
-                'token'   => null,
             ],
             200
         );
@@ -42,7 +40,6 @@ class CheckController extends Controller
                 [
                     'success' => true,
                     'message' => 'Пользователь с таким email существует',
-                    'token'   => null,
                 ],
                 200
             );
@@ -52,7 +49,6 @@ class CheckController extends Controller
             [
                 'success' => false,
                 'message' => 'Пользователя с таким email не существует',
-                'token'   => null,
             ],
             200
         );
