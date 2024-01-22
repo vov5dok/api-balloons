@@ -138,6 +138,7 @@ class UserController extends Controller
             [
                 'success' => true,
                 'message' => '',
+                'login'   => $user->login,
                 'money'   => $user->money,
                 'rating'  => $user->countStar,
                 'height'  => $height,
