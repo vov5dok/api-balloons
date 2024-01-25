@@ -79,8 +79,34 @@ class ProductController extends Controller
             );
         }
 
-        if ($product->money_type_id == 'efd5e420-d9f0-4984-9f68-58bdee87b8d1') {
-            if ($user->money >= $product->price) {
+//        if ($product->money_type_id == 'efd5e420-d9f0-4984-9f68-58bdee87b8d1') {
+//            if ($user->money >= $product->price) {
+//                if ($product->figure_id == '271c8561-09a2-4e57-9ccb-9f62d7cd9253') {
+//                    $user->money -= $product->price;
+//                    $user->save();
+//
+//                    $hint = $user->hints()->where('figure_id', $product->figure_id)->first();
+//                    $hint->count += 1;
+//                    $hint->save();
+//                } else {
+//                    $user->money -= $product->price;
+//                    $user->save();
+//                }
+//            } else {
+//                return response()->json(
+//                    [
+//                        'success'  => false,
+//                        'message'  => 'Недостаточно денег',
+//                    ],
+//                    500
+//                );
+//            }
+//        }
+
+
+
+        if ($user->money >= $product->price) {
+            if ($product->money_type_id == 'efd5e420-d9f0-4984-9f68-58bdee87b8d1') {
                 if ($product->figure_id == '271c8561-09a2-4e57-9ccb-9f62d7cd9253') {
                     $user->money -= $product->price;
                     $user->save();
@@ -92,15 +118,15 @@ class ProductController extends Controller
                     $user->money -= $product->price;
                     $user->save();
                 }
-            } else {
-                return response()->json(
-                    [
-                        'success'  => false,
-                        'message'  => 'Недостаточно денег',
-                    ],
-                    500
-                );
             }
+        } else {
+            return response()->json(
+                [
+                    'success'  => false,
+                    'message'  => 'Недостаточно денег',
+                ],
+                500
+            );
         }
 
         return response()->json(
