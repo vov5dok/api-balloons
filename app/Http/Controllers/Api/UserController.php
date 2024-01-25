@@ -118,6 +118,8 @@ class UserController extends Controller
                 [
                     'success' => false,
                     'message' => 'Пользователь не авторизован',
+                    'login'   => null,
+                    'email'   => null,
                     'money'   => null,
                     'rating'  => null,
                     'height'  => null,
@@ -139,6 +141,7 @@ class UserController extends Controller
                 'success' => true,
                 'message' => '',
                 'login'   => $user->login,
+                'email'   => $user->email,
                 'money'   => $user->money,
                 'rating'  => $user->countStar,
                 'height'  => $height,
