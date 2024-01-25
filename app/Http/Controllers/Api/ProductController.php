@@ -112,7 +112,7 @@ class ProductController extends Controller
                     $user->save();
 
                     $hint = $user->hints()->where('figure_id', $product->figure_id)->first();
-                    $hint->count += 1;
+                    $hint->count += $product->count;
                     $hint->save();
                 } else {
                     $user->money -= $product->price;

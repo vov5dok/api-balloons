@@ -17,8 +17,13 @@ class Product extends Model
         return $this->money_type_id == MoneyType::typeCoins()->id;
     }
 
+    public function figure()
+    {
+        return $this->belongsTo(Figure::class);
+    }
+
     public function scopeProductTypeHint()
     {
-        return $this->figure_id == FigureType::typeHint()->id;
+        return $this->figure->figure_type_id == FigureType::typeHint()->id;
     }
 }
