@@ -11,4 +11,14 @@ class Product extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['price', 'count', 'money_type_id', 'figure_id'];
+
+    public function scopeProductToCoins()
+    {
+        return $this->money_type_id == MoneyType::typeCoins()->id;
+    }
+
+    public function scopeProductTypeHint()
+    {
+        return $this->figure_id == FigureType::typeHint()->id;
+    }
 }

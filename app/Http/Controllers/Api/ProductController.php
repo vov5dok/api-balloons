@@ -7,6 +7,7 @@ use App\Http\Requests\User\CheckRecoveryCodeRequest;
 use App\Http\Requests\User\RecoveryCodeRequest;
 use App\Http\Requests\User\SetPasswordRequest;
 use App\Mail\User\RecoveryCodeMail;
+use App\Models\MoneyType;
 use App\Models\Product;
 use App\Models\User;
 use Carbon\Carbon;
@@ -104,10 +105,9 @@ class ProductController extends Controller
 //        }
 
 
-
-        if ($user->money >= $product->price) {
-            if ($product->money_type_id == 'efd5e420-d9f0-4984-9f68-58bdee87b8d1') {
-                if ($product->figure_id == '271c8561-09a2-4e57-9ccb-9f62d7cd9253') {
+        if ($product->productToCoins()) {
+            if ($user->money >= $product->price) {
+                if ($product->productTypeHint()) {
                     $user->money -= $product->price;
                     $user->save();
 
@@ -118,15 +118,17 @@ class ProductController extends Controller
                     $user->money -= $product->price;
                     $user->save();
                 }
+            } else {
+                return response()->json(
+                    [
+                        'success'  => false,
+                        'message'  => 'Недостаточно денег',
+                    ],
+                    500
+                );
             }
         } else {
-            return response()->json(
-                [
-                    'success'  => false,
-                    'message'  => 'Недостаточно денег',
-                ],
-                500
-            );
+            // работа с кассой
         }
 
         return response()->json(
