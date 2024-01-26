@@ -64,7 +64,8 @@ class LevelController extends Controller
 
         $level['cells'] = [];
 
-        foreach ($levelModel->cells as $cell) {
+        $levelModelSorted = $levelModel->cells->sortBy(['x', 'y']);
+        foreach ($levelModelSorted as $cell) {
             $level['cells'][] = [
                 'x'           => $cell->x,
                 'y'           => $cell->y,
