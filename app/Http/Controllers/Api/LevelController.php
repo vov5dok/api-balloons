@@ -63,6 +63,7 @@ class LevelController extends Controller
         }
 
         $level['cells'] = [];
+
         foreach ($levelModel->cells as $cell) {
             $level['cells'][] = [
                 'x'           => $cell->x,
