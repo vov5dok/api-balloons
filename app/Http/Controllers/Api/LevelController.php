@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Enums\FigureTypes;
 use App\Http\Controllers\Controller;
 use App\Models\CompletedLevel;
+use App\Models\Figure;
+use App\Models\Hint;
 use App\Models\Level;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -46,7 +49,9 @@ class LevelController extends Controller
         ];
 
         $level['goals'] = [];
+        $figure = null;
         foreach ($levelModel->goals as $goal) {
+            $figure = Figure::find($goal->figure_id)->first();
             $level['goals'][] = [
                 'figure' => $goal->figure_id,
                 'count'  => $goal->count,
@@ -60,6 +65,16 @@ class LevelController extends Controller
                 'count'      => $award->count,
                 'countStar'  => $award->count_star,
             ];
+        }
+
+        $level['steps'] = [];
+        if ($figure->figureType == FigureTypes::Step) {
+            foreach ($levelModel->goals as $goal) {
+                $level['steps'][] = [
+                    'figure' => $goal->figure_id,
+                    'count'  => $goal->count,
+                ];
+            }
         }
 
         $level['cells'] = [];
@@ -115,6 +130,30 @@ class LevelController extends Controller
             ['level_id' => $levelModel->id, 'user_id' => $user->id],
             ['count_star' => $request->countStar]
         );
+
+        $awards = $levelModel->awards;
+        foreach ($awards as $award) {
+            $figure = $award->figure;
+
+            if ($figure->figureType == FigureTypes::Hint) {
+                $hint = Hint::where('user_id', $user->id)->where('figure_id', $figure->id)->first();
+                if ($hint == null) {
+                    Hint::create([
+                        'user_id' => $user->id,
+                        'figure_id' => $figure->id,
+                        'count' => $award->count,
+                    ]);
+                } else {
+                    $hint += $award->count;
+                    $hint->save();
+                }
+            }
+
+            if ($figure->figureType == FigureTypes::Coins) {
+                $user->money += $award->count;
+                $user->save();
+            }
+        }
 
         return response()->json(
             [

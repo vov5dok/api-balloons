@@ -128,9 +128,9 @@ class CategoryController extends Controller
         if ($user == null) {
             return response()->json(
                 [
-                    'success'  => false,
-                    'message'  => 'Пользователь не авторизован',
-                    'levels' => null,
+                    'success' => false,
+                    'message' => 'Пользователь не авторизован',
+                    'levels'  => null,
                 ],
                 500
             );
@@ -142,15 +142,15 @@ class CategoryController extends Controller
         if ($category == null) {
             return response()->json(
                 [
-                    'success'  => false,
-                    'message'  => 'Категория не найдена',
-                    'levels'   => null,
+                    'success' => false,
+                    'message' => 'Категория не найдена',
+                    'levels'  => null,
                 ],
                 500
             );
         }
 
-        foreach ($category->levels as $levelModel) {
+        foreach ($category->levels()->orderByAsc('number')->get() as $levelModel) {
 
             $goals = [];
 
@@ -162,12 +162,13 @@ class CategoryController extends Controller
             }
 
             $level = [
-                'id' => $levelModel->id,
-                'number' => $levelModel->number,
-                'height' => $levelModel->height,
+                'id'          => $levelModel->id,
+                'number'      => $levelModel->number,
+                'height'      => $levelModel->height,
+                'description' => $levelModel->description,
                 'isCompleted' => $levelModel->completedLevelByUser->isNotEmpty(),
-                'countStar' => $levelModel->completedLevelByUser->isNotEmpty() ? $levelModel->completedLevelByUser->first()->count_star : 0,
-                'goals' => $goals,
+                'countStar'   => $levelModel->completedLevelByUser->isNotEmpty() ? $levelModel->completedLevelByUser->first()->count_star : 0,
+                'goals'       => $goals,
             ];
 
             $levels[] = $level;

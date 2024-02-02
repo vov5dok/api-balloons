@@ -7,4 +7,6 @@ namespace App\Enums;
 enum FigureTypes : string
 {
     case Hint = 'Подсказка';
+    case Step = 'ход';
+    case Coins = 'монеты';
 }

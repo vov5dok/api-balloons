@@ -11,4 +11,9 @@ class Award extends Model
     use HasFactory, HasUuids;
 
     protected $fillable = ['count', 'level_id', 'figure_id', 'count_star'];
+
+    public function figure()
+    {
+        return $this->belongsTo(Figure::class);
+    }
 }
