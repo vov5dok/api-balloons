@@ -49,32 +49,31 @@ class LevelController extends Controller
         ];
 
         $level['goals'] = [];
+        $level['steps'] = [];
         $figure = null;
         foreach ($levelModel->goals as $goal) {
-            $figure = Figure::find($goal->figure_id)->first();
-            $level['goals'][] = [
-                'figure' => $goal->figure_id,
-                'count'  => $goal->count,
-            ];
+            $figure = Figure::where('id', $goal->figure_id)->first();
+			
+			if ($figure->figureType->name == FigureTypes::Step->value) {
+				$level['steps'] = [
+					'figure' => $goal->figure_id,
+					'count'  => $goal->count,
+				];
+			} else {
+				$level['goals'][] = [
+					'figure' => $goal->figure_id,
+					'count'  => $goal->count,
+				];
+			}            
         }
 
         $level['awards'] = [];
-        foreach ($levelModel->awards as $award) {
+        foreach ($levelModel->awards->sortByDesc('count_star') as $award) {
             $level['awards'][] = [
                 'figure'     => $award->figure_id,
                 'count'      => $award->count,
                 'countStar'  => $award->count_star,
             ];
-        }
-
-        $level['steps'] = [];
-        if ($figure->figureType == FigureTypes::Step) {
-            foreach ($levelModel->goals as $goal) {
-                $level['steps'][] = [
-                    'figure' => $goal->figure_id,
-                    'count'  => $goal->count,
-                ];
-            }
         }
 
         $level['cells'] = [];
@@ -125,35 +124,50 @@ class LevelController extends Controller
                 500
             );
         }
+		
+		$completedLevel = CompletedLevel::where('user_id', $user->id)->where('level_id', $levelModel->id)->first();
+		
+		if ($completedLevel == null) {
+			CompletedLevel::created([
+				'level_id' => $levelModel->id,
+				'user_id' => $user->id,
+				'count_star' => $request->countStar
+			]);
+		} else {
+			if ($request->countStar > $completedLevel->count_star) {
+				$completedLevel = CompletedLevel::updateOrCreate(
+					['level_id' => $levelModel->id, 'user_id' => $user->id],
+					['count_star' => $request->countStar]
+				);
 
-        $completedLevel = CompletedLevel::updateOrCreate(
-            ['level_id' => $levelModel->id, 'user_id' => $user->id],
-            ['count_star' => $request->countStar]
-        );
+				$awards = $levelModel->awards;
+				foreach ($awards as $award) {
+					$figure = $award->figure;
+					
+					if ($award->count_star == $request->countStar) {
+						if ($figure->figureType->name == FigureTypes::Hint->value) {
+							$hint = Hint::where('user_id', $user->id)->where('figure_id', $figure->id)->first();
+							if ($hint == null) {
+								Hint::create([
+									'user_id' => $user->id,
+									'figure_id' => $figure->id,
+									'count' => $award->count,
+								]);
+							} else {
+								$hint->count += $award->count;
+								$hint->save();
+							}
+						}
+						
+						if ($figure->figureType->name == FigureTypes::Coins->value) {
+							$user->money += $award->count;
+							$user->save();
+						}
+					}            
+				}
+			}
+		}
 
-        $awards = $levelModel->awards;
-        foreach ($awards as $award) {
-            $figure = $award->figure;
-
-            if ($figure->figureType == FigureTypes::Hint) {
-                $hint = Hint::where('user_id', $user->id)->where('figure_id', $figure->id)->first();
-                if ($hint == null) {
-                    Hint::create([
-                        'user_id' => $user->id,
-                        'figure_id' => $figure->id,
-                        'count' => $award->count,
-                    ]);
-                } else {
-                    $hint += $award->count;
-                    $hint->save();
-                }
-            }
-
-            if ($figure->figureType == FigureTypes::Coins) {
-                $user->money += $award->count;
-                $user->save();
-            }
-        }
 
         return response()->json(
             [

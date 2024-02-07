@@ -149,8 +149,8 @@ class CategoryController extends Controller
                 500
             );
         }
-
-        foreach ($category->levels()->orderByAsc('number')->get() as $levelModel) {
+		
+        foreach ($category->levels->sortBy('number') as $levelModel) {
 
             $goals = [];
 
