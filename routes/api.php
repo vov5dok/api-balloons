@@ -16,6 +16,7 @@ Route::group([], function () {
     Route::get('/configuration/formReg', [\App\Http\Controllers\Api\ConfigController::class, 'formReg']);
     Route::get('/checkLogin/{login}', [\App\Http\Controllers\Api\CheckController::class, 'login']);
     Route::get('/checkEmail/{email}', [\App\Http\Controllers\Api\CheckController::class, 'email']);
+    Route::get('/configuration/time-unix', [\App\Http\Controllers\Api\ConfigController::class, 'unix']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {

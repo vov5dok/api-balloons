@@ -42,4 +42,9 @@ class ConfigController extends Controller
             200
         );
     }
+
+    public function unix()
+    {
+        return time();
+    }
 }
