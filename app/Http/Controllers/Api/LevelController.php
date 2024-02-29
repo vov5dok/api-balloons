@@ -49,22 +49,22 @@ class LevelController extends Controller
         ];
 
         $level['goals'] = [];
-        $level['steps'] = [];
+        $level['steps'] = -1;
+        $level['time'] = -1;
         $figure = null;
         foreach ($levelModel->goals as $goal) {
             $figure = Figure::where('id', $goal->figure_id)->first();
-			
+
 			if ($figure->figureType->name == FigureTypes::Step->value) {
-				$level['steps'] = [
-					'figure' => $goal->figure_id,
-					'count'  => $goal->count,
-				];
-			} else {
+				$level['steps'] = $goal->count;
+			} elseif ($figure->figureType->name == FigureTypes::Time->value) {
+                $level['time'] = $goal->count;
+            } else {
 				$level['goals'][] = [
 					'figure' => $goal->figure_id,
 					'count'  => $goal->count,
 				];
-			}            
+			}
         }
 
         $level['awards'] = [];
@@ -88,6 +88,8 @@ class LevelController extends Controller
                 'countShoot'  => $cell->count_shoot,
             ];
         }
+
+        $level['free'] = $level['steps'] == -1 && $level['time'] == -1 ? 1 : -1;
 
         return response()->json(
             [
@@ -124,9 +126,9 @@ class LevelController extends Controller
                 500
             );
         }
-		
+
 		$completedLevel = CompletedLevel::where('user_id', $user->id)->where('level_id', $levelModel->id)->first();
-		
+
 		if ($completedLevel == null) {
 			CompletedLevel::created([
 				'level_id' => $levelModel->id,
@@ -143,7 +145,7 @@ class LevelController extends Controller
 				$awards = $levelModel->awards;
 				foreach ($awards as $award) {
 					$figure = $award->figure;
-					
+
 					if ($award->count_star == $request->countStar) {
 						if ($figure->figureType->name == FigureTypes::Hint->value) {
 							$hint = Hint::where('user_id', $user->id)->where('figure_id', $figure->id)->first();
@@ -158,12 +160,12 @@ class LevelController extends Controller
 								$hint->save();
 							}
 						}
-						
+
 						if ($figure->figureType->name == FigureTypes::Coins->value) {
 							$user->money += $award->count;
 							$user->save();
 						}
-					}            
+					}
 				}
 			}
 		}

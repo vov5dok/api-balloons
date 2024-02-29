@@ -9,4 +9,5 @@ enum FigureTypes : string
     case Hint = 'подсказка';
     case Step = 'ход';
     case Coins = 'монеты';
+    case Time = 'время';
 }
