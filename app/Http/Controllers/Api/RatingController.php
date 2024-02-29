@@ -35,17 +35,23 @@ class RatingController extends Controller
             );
         }
 
-
         $ratingUsers = DB::table('users')
-            ->select(DB::raw('ROW_NUMBER() OVER(ORDER BY sum_count_star DESC) AS number'), 'user_id', 'login', 'sum_count_star')
-            ->leftJoin(DB::raw('(SELECT user_id, SUM(count_star) as sum_count_star FROM api_balloons.completed_levels GROUP BY user_id) as group_completed_levels'), 'group_completed_levels.user_id', '=', 'users.id')
-            
-            ->get();
+			->leftJoinSub(function ($query) {
+				$query->from('api_balloons.completed_levels')
+					->select('user_id', DB::raw('SUM(count_star) as sum_count_star'))
+					->groupBy('user_id');
+			}, 'group_completed_levels', function ($join) {
+				$join->on('group_completed_levels.user_id', '=', 'users.id');
+			})
+			->select(
+				DB::raw('ROW_NUMBER() OVER (ORDER BY COALESCE(sum_count_star, 0) DESC) AS number'),
+				'users.id',
+				'users.login',
+				DB::raw('COALESCE(sum_count_star, 0) as sum_count_star')
+			)
+			->get();
 
-
-
-
-        $thisUserInRating = $ratingUsers->where('user_id', $user->id)->first();
+        $thisUserInRating = $ratingUsers->where('id', $user->id)->first();
         $topUserInRating = $ratingUsers->whereIn('number', [1,2,3]);
 
         foreach ($topUserInRating as $ratingUser) {
