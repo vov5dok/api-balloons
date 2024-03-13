@@ -17,4 +17,9 @@ class MoneyType extends Model
     {
         return $query->where('name', MoneyTypes::COINS)->first();
     }
+
+    public function scopeTypeMoney($query)
+    {
+        return $query->where('name', MoneyTypes::MONEY)->first();
+    }
 }

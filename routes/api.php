@@ -32,4 +32,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/products', [\App\Http\Controllers\Api\ProductController::class, 'index']);
     Route::get('/rating', [\App\Http\Controllers\Api\RatingController::class, 'top']);
     Route::post('/product/buy', [\App\Http\Controllers\Api\ProductController::class, 'buy']);
+    Route::post('/product/buyInKassa', [\App\Http\Controllers\Api\ProductController::class, 'buyInKassa']);
+    Route::get('/product/successBuy', [\App\Http\Controllers\Api\ProductController::class, 'successBuy']);
+    Route::get('/product/failBuy', [\App\Http\Controllers\Api\ProductController::class, 'failBuy']);
+    Route::get('/pay/{pay}/status', [\App\Http\Controllers\Api\PayController::class, 'status']);
 });
+

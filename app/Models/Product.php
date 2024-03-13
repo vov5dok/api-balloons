@@ -12,14 +12,19 @@ class Product extends Model
 
     protected $fillable = ['price', 'count', 'money_type_id', 'figure_id'];
 
+    public function figure()
+    {
+        return $this->belongsTo(Figure::class);
+    }
+
     public function scopeProductToCoins()
     {
         return $this->money_type_id == MoneyType::typeCoins()->id;
     }
 
-    public function figure()
+    public function scopeProductToMoney()
     {
-        return $this->belongsTo(Figure::class);
+        return $this->money_type_id == MoneyType::typeMoney()->id;
     }
 
     public function scopeProductTypeHint()
