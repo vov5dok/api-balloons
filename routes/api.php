@@ -17,12 +17,18 @@ Route::group([], function () {
     Route::get('/checkLogin/{login}', [\App\Http\Controllers\Api\CheckController::class, 'login']);
     Route::get('/checkEmail/{email}', [\App\Http\Controllers\Api\CheckController::class, 'email']);
     Route::get('/configuration/time-unix', [\App\Http\Controllers\Api\ConfigController::class, 'unix']);
+    Route::get('/product/successBuy', [\App\Http\Controllers\Api\ProductController::class, 'successBuy']);
+    Route::get('/product/failBuy', [\App\Http\Controllers\Api\ProductController::class, 'failBuy']);
+    Route::get('/pay/{pay}/status', [\App\Http\Controllers\Api\PayController::class, 'status']);
+    Route::get('/stat/statuses', [\App\Http\Controllers\Api\StatisticController::class, 'statuses']);
+    Route::post('/stat/add', [\App\Http\Controllers\Api\StatisticController::class, 'create']);
 });
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/getUserByJWT', [\App\Http\Controllers\Api\UserController::class, 'showByJWT']);
     Route::patch('/modifyLogin', [\App\Http\Controllers\Api\UserController::class, 'modifyLogin']);
     Route::patch('/modifyEmail', [\App\Http\Controllers\Api\UserController::class, 'modifyEmail']);
+    Route::post('/updateCredential', [\App\Http\Controllers\Api\UserController::class, 'updateCredential']);
     Route::get('/category/all', [\App\Http\Controllers\Api\CategoryController::class, 'all']);
     Route::get('/category/levels/{category_id}', [\App\Http\Controllers\Api\CategoryController::class, 'levels']);
     Route::get('/level/{levelId}', [\App\Http\Controllers\Api\LevelController::class, 'index']);
@@ -34,8 +40,3 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('/product/buy', [\App\Http\Controllers\Api\ProductController::class, 'buy']);
     Route::post('/product/buyInKassa', [\App\Http\Controllers\Api\ProductController::class, 'buyInKassa']);
 });
-
-Route::get('/product/successBuy', [\App\Http\Controllers\Api\ProductController::class, 'successBuy']);
-Route::get('/product/failBuy', [\App\Http\Controllers\Api\ProductController::class, 'failBuy']);
-Route::get('/pay/{pay}/status', [\App\Http\Controllers\Api\PayController::class, 'status']);
-

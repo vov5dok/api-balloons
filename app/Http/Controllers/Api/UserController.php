@@ -8,6 +8,7 @@ use App\Http\Requests\User\ModifyEmailRequest;
 use App\Http\Requests\User\ModifyLoginRequest;
 use App\Http\Requests\User\RecoveryCodeRequest;
 use App\Http\Requests\User\SetPasswordRequest;
+use App\Http\Requests\User\UpdateCredentialRequest;
 use App\Mail\User\RecoveryCodeMail;
 use App\Models\User;
 use Carbon\Carbon;
@@ -192,6 +193,38 @@ class UserController extends Controller
 
         $user->email = $request['email'];
         $user->save();
+
+        return response()->json(
+            [
+                'success' => true,
+                'message' => '',
+            ],
+            200
+        );
+    }
+
+    public function updateCredential(UpdateCredentialRequest $request)
+    {
+        $data = $request->validated();
+        $user = auth()->user();
+
+        if ($user == null) {
+            return response()->json(
+                [
+                    'success' => false,
+                    'message' => 'Пользователь не авторизован',
+                ],
+                500
+            );
+        }
+
+        $user->update([
+            'login'         => $data['login'],
+            'password'      => bcrypt($data['password']),
+            'email'         => $data['email'] ?? $user->email,
+            'created_at'    => Carbon::now(),
+            'is_registered' => true
+        ]);
 
         return response()->json(
             [

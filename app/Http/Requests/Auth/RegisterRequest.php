@@ -17,9 +17,10 @@ class RegisterRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => 'required|string|unique:users|between:3,30',
-            'email' => 'required|email:rfc,dns|unique:users',
-            'password' => 'required|confirmed|min:8',
+            'login'         => 'required|string|unique:users|between:3,30',
+            'email'         => 'required|email:rfc,dns|unique:users',
+            'password'      => 'required|confirmed|min:8',
+            'is_registered' => 'boolean',
         ];
     }
 
@@ -36,6 +37,7 @@ class RegisterRequest extends FormRequest
             'password.required' => 'Поле Пароль обязательно для заполнения',
             'password.confirmed' => 'Пароли не соответствуют друг другу',
             'password.min' => 'Минимальная длина пароля - :min символов',
+            'is_registered.boolean' => 'is_registered принимает только boolean значение',
         ];
     }
 

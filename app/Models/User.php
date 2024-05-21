@@ -28,6 +28,8 @@ class User extends Authenticatable implements JWTSubject
         'money',
         'recovery_code',
         'recovery_date',
+        'is_registered',
+        'created_at',
     ];
 
     /**
